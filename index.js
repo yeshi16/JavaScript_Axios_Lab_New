@@ -12,7 +12,7 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access
-const url = `https://api.thecatapi.com/v1/breedsh`;
+const url = `https://api.thecatapi.com/v1/breeds`;
 const API_KEY = "live_EGbzb0OYYbgmBwH76vL1d92AMdqXGhvYplVPMOLhzP4jaoL5kl9jEeCT9ySCxAOs"
 
 /**
@@ -239,9 +239,9 @@ axios.interceptors.response.use(response => {
  */
 
 // const API_URL = `https://api.thecatapi.com/v1/votes/`;
-const API_URL = 'https://api.thecatapi.com/v1/favouritesh/';
+const API_URL = 'https://api.thecatapi.com/v1/favourites/';
 
-async function isFavourited(catId) { 
+export async function isFavourited(catId) { 
   const response = await axios.get(API_URL, {
     headers: {
       'x-api-key': API_KEY
@@ -252,31 +252,29 @@ async function isFavourited(catId) {
   // console.log(getFavourites)
 
     const favourite = getFavourites.find(({ image_id }) => image_id === catId);
-    if (favourite) {
-      return favourite.image_id
-    } else {
-      return null
-    }
-
-
+    return favourite ? favourite.id : null;
+  
 }
-
+// const favouriteId = await isFavourited('hBXicehMA');
+// console.log(favouriteId)
 
 export async function favourite(imgId) {
   // your code here
 
   try {
       const favouriteId = await isFavourited(imgId);
-      // console.log(favouriteId)
+      console.log(favouriteId)
       const ChangeColorFavouriteButton = document.querySelector('.favourite-button svg')
+      
+
        if (favouriteId) {
         // If already favourited delete the favourite
-        await axios.delete(`${API_URL}:favouriteId`, { 
+        await axios.delete(`${API_URL}${favouriteId}`, { 
           headers: {
             'x-api-key': API_KEY
           }
         });
-        // console.log(`Image ${imgId} removed from favourites.`);
+     
         ChangeColorFavouriteButton.setAttribute('fill', 'lightpink');
       } else {
     // If not favourited, add to favourites
@@ -288,8 +286,7 @@ export async function favourite(imgId) {
         'Content-Type': 'application/json'
       }
     });
-    console.log(`Image ${imgId} added to favourites.`);
-    
+  
     ChangeColorFavouriteButton.setAttribute('fill', 'red');   
   }
   } catch (err) {
@@ -324,16 +321,14 @@ async function getFavourites(){
   // console.log(getFavourites) 
   
   for (let i = 0; i < getFavourites.length; i++) {
-    const breedId = getFavourites[i].id
-    if (breedId == selectedValue) {
       const imgSrc = getFavourites[i].image.url
       const imgAlt = ''
       const imgId = getFavourites[i].image.id
       const element = Carousel.createCarouselItem(imgSrc, imgAlt, imgId)
       Carousel.appendCarousel(element)
-    }
+    
 }
-Carousel.start()
+
 }
 
 /**
