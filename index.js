@@ -115,6 +115,13 @@ async function initialLoadAxios() {
   const catBreed = response.data;
   // console.log(catBreed)
 
+  const placeholderOption = document.createElement('option');
+  placeholderOption.textContent = 'Select a breed';
+  placeholderOption.setAttribute('value', '');
+  placeholderOption.setAttribute('disabled', 'true');
+  placeholderOption.setAttribute('selected', 'true');
+  breedSelected.appendChild(placeholderOption);
+
   for (let i = 0; i < catBreed.length; i++) {
     const breedId = catBreed[i].id
     const breedName = catBreed[i].name
@@ -263,7 +270,7 @@ export async function favourite(imgId) {
 
   try {
       const favouriteId = await isFavourited(imgId);
-      console.log(favouriteId)
+      // console.log(favouriteId)
       const ChangeColorFavouriteButton = document.querySelector('.favourite-button svg')
       
 

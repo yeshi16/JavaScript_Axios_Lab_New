@@ -14,9 +14,6 @@ export  function createCarouselItem(imgSrc, imgAlt, imgId) {
     favourite(imgId);
   });
 
-  favBtn.addEventListener('click', () => {
-    favourite(image.id);
-  });
   return clone;
 }
 
